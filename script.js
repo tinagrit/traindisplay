@@ -53,10 +53,22 @@ const setup = (configs) => {
         console.error("CONFIG: Bad station or not given");
         return;
     }
+    if (line.stations.indexOf(configs['station']) == -1) {
+        console.error("CONFIG: station is not on the specified line");
+        return;
+    }
     station = stations[configs['station']];
 
     if (!configs['terminus'] || !stations[configs['terminus']]) {
         console.error("CONFIG: Bad terminus or not given");
+        return;
+    }
+    if (line.stations.indexOf(configs['terminus']) == -1) {
+        console.error("CONFIG: Pathfinding failed. terminus is not on the same line as station");
+        return;
+    }
+    if (configs['station'] == configs['terminus']) {
+        console.error("CONFIG: Pathfinding failed. No direction given since terminus is station");
         return;
     }
     terminus = stations[configs['terminus']];
