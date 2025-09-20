@@ -1,280 +1,64 @@
-const lines = {
-    "exp_pw": {
-        "name": "Expo Line",
-        "color": "exp",
-        "self-connection": "exp",
-        "stations": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
-    },
-    "exp_kg": {
-        "name": "Expo Line",
-        "color": "exp",
-        "self-connection": "exp",
-        "stations": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23,24]
-    },
-    "mil": {
-        "name": "Millenium Line",
-        "color": "mil",
-        "self-connection": "mil",
-        "stations": [25,6,26,27,28,29,30,31,32,20,19,33,34,35,36,37,38]
-    },
-    "can": {
-        "name": "Canada Line",
-        "color": "can",
-        "self-connection": "can",
-        "stations": [1]
+let lines, connections, stations;
+let line, station, terminus, facing, parked;
+
+const init = (...configs) => {
+    fetch("./data/lines.json")
+        .then(response => {return response.json()})
+        .then(data => {
+            lines = data;
+        })
+        .catch(err => {
+            console.error("FETCH: lines.json failed");
+            return;
+        })
+    
+    fetch("./data/connections.json")
+        .then(response => {return response.json()})
+        .then(data => {
+            connections = data;
+        })
+        .catch(err => {
+            console.error("FETCH: connections.json failed");
+            return;
+        })
+
+    fetch("./data/stations.json")
+        .then(response => {return response.json()})
+        .then(data => {
+            stations = data;
+        })
+        .catch(err => {
+            console.error("FETCH: stations.json failed");
+            return;
+        })
+
+    if (!configs['line'] || !lines[configs['line']]) {
+        console.error("CONFIG: Bad line or not given");
+        return;
+    }
+    line = lines[configs['line']];
+
+    if (!configs['station'] || !stations[configs['station']]) {
+        console.error("CONFIG: Bad station or not given");
+        return;
+    }
+    station = stations[configs['station']];
+
+    if (!configs['terminus'] || !stations[configs['terminus']]) {
+        console.error("CONFIG: Bad terminus or not given");
+        return;
+    }
+    terminus = stations[configs['terminus']];
+
+    if (!configs['facing'] || (configs['facing'] != "left" && configs['facing'] != "right")) {
+        console.error("CONFIG: facing has to be either left or right");
+        return;
+    }
+    facing = configs['facing'];
+
+    if (configs['parked']) {
+        parked = true;
+    } else {
+        parked = false;
     }
 }
-
-const connections = {
-    "exp": {
-        "name": "Expo Line",
-        "color": "exp"
-    },
-    "mil": {
-        "name": "Millenium Line",
-        "color": "mil"
-    },
-    "bline": {
-        "name": "99 B-Line",
-        "color": "bline"
-    },
-    "sea": {
-        "name": "SeaBus",
-        "color": "sea"
-    },
-    "wce": {
-        "name": "West Coast Express",
-        "color": "wce"
-    },
-    "can": {
-        "name": "Canada Line",
-        "color": "can"
-    },
-    "r1": {
-        "name": "R1 King George Blvd",
-        "color": "rap"
-    },
-    "r2": {
-        "name": "R2 Marine Dr",
-        "color": "rap"
-    },
-    "r3": {
-        "name": "R3 Lougheed Hwy",
-        "color": "rap"
-    },
-    "r4": {
-        "name": "R4 41st Ave",
-        "color": "rap"
-    },
-    "r5": {
-        "name": "R5 Hastings St",
-        "color": "rap"
-    },
-    "r6": {
-        "name": "R6 Scott Rd",
-        "color": "rap"
-    }
-}
-
-const stations = {
-    1: {
-        "name": "Waterfront",
-        "connections": ["exp","can","sea","wce"],
-        "ob_door": "left"
-    },
-    2: {
-        "name": "Burrard",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    3: {
-        "name": "Granville",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    4: {
-        "name": "Stadium-Chinatown",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    5: {
-        "name": "Main Street-Science World",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    6: {
-        "name": "Commercial-Broadway",
-        "connections": ["exp","mil","bline"],
-        "ob_door": "right"
-    },
-    7: {
-        "name": "Nanaimo",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    8: {
-        "name": "29th Avenue",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    9: {
-        "name": "Joyce-Collingwood",
-        "connections": ["exp","r4"],
-        "ob_door": "right"
-    },
-    10: {
-        "name": "Patterson",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    11: {
-        "name": "Metrotown",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    12: {
-        "name": "Royal Oak",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    13: {
-        "name": "Edmonds",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    14: {
-        "name": "22nd Street",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    15: {
-        "name": "New Westminster",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    16: {
-        "name": "Columbia",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    17: {
-        "name": "Sapperton",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    18: {
-        "name": "Braid",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    19: {
-        "name": "Lougheed Town Centre",
-        "connections": ["exp","mil"],
-        "ob_door": "right"
-    },
-    20: {
-        "name": "Production Way-University",
-        "connections": ["exp","mil"],
-        "ob_door": "right"
-    },
-    21: {
-        "name": "Scott Road",
-        "connections": ["exp","r6"],
-        "ob_door": "right"
-    },
-    22: {
-        "name": "Gateway",
-        "connections": ["exp"],
-        "ob_door": "right"
-    },
-    23: {
-        "name": "Surrey Central",
-        "connections": ["exp","r1"],
-        "ob_door": "right"
-    },
-    24: {
-        "name": "King George",
-        "connections": ["exp","r1"],
-        "ob_door": "right"
-    },
-    25: {
-        "name": "VCC-Clark",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    26: {
-        "name": "Renfrew",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    27: {
-        "name": "Rupert",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    28: {
-        "name": "Gilmore",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    29: {
-        "name": "Brentwood Town Centre",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    30: {
-        "name": "Holdom",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    31: {
-        "name": "Sperling-Burnaby Lake",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    32: {
-        "name": "Lake City Way",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    33: {
-        "name": "Burquitlam",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    34: {
-        "name": "Moody Centre",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    35: {
-        "name": "Inlet Centre",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    36: {
-        "name": "Coquitlam Central",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    37: {
-        "name": "Lincoln",
-        "connections": ["mil"],
-        "ob_door": "right"
-    },
-    38: {
-        "name": "Lafarge Lake-Douglas",
-        "connections": ["mil"],
-        "ob_door": "right"
-    }
-}
-
-// config
-let line = lines["exp_pw"];
-let station = stations[1];
-let terminus = stations[line.stations[line.stations.length-1]];
-let facing = "left";
-let parked = true;
-
-let stationsInRange = [];
-

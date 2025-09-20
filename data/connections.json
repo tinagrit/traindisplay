@@ -1,0 +1,50 @@
+{
+    "exp": {
+        "name": "Expo Line",
+        "color": "exp"
+    },
+    "mil": {
+        "name": "Millenium Line",
+        "color": "mil"
+    },
+    "bline": {
+        "name": "99 B-Line",
+        "color": "bline"
+    },
+    "sea": {
+        "name": "SeaBus",
+        "color": "sea"
+    },
+    "wce": {
+        "name": "West Coast Express",
+        "color": "wce"
+    },
+    "can": {
+        "name": "Canada Line",
+        "color": "can"
+    },
+    "r1": {
+        "name": "R1 King George Blvd",
+        "color": "rap"
+    },
+    "r2": {
+        "name": "R2 Marine Dr",
+        "color": "rap"
+    },
+    "r3": {
+        "name": "R3 Lougheed Hwy",
+        "color": "rap"
+    },
+    "r4": {
+        "name": "R4 41st Ave",
+        "color": "rap"
+    },
+    "r5": {
+        "name": "R5 Hastings St",
+        "color": "rap"
+    },
+    "r6": {
+        "name": "R6 Scott Rd",
+        "color": "rap"
+    }
+}
