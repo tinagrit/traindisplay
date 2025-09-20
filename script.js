@@ -1,11 +1,15 @@
 let lines, connections, stations;
 let line, station, terminus, facing, parked;
 
-const init = (...configs) => {
+const colors = ["exp", "mil", "can"];
+
+const init = (configs) => {
+    // FETCH SETUP
     fetch("./data/lines.json")
         .then(response => {return response.json()})
         .then(data => {
             lines = data;
+            setup(configs);
         })
         .catch(err => {
             console.error("FETCH: lines.json failed");
@@ -16,6 +20,7 @@ const init = (...configs) => {
         .then(response => {return response.json()})
         .then(data => {
             connections = data;
+            setup(configs);
         })
         .catch(err => {
             console.error("FETCH: connections.json failed");
@@ -26,12 +31,18 @@ const init = (...configs) => {
         .then(response => {return response.json()})
         .then(data => {
             stations = data;
+            setup(configs);
         })
         .catch(err => {
             console.error("FETCH: stations.json failed");
             return;
         })
+}
 
+const setup = (configs) => {
+    if (!lines || !connections || !stations) return;
+
+    // CONFIG SETUP
     if (!configs['line'] || !lines[configs['line']]) {
         console.error("CONFIG: Bad line or not given");
         return;
@@ -60,5 +71,23 @@ const init = (...configs) => {
         parked = true;
     } else {
         parked = false;
+    }
+
+    // TOP BAR SETUP
+    colors.forEach(color => {
+        if (document.body.classList.contains(color)) {
+            document.body.classList.remove(color);
+        }
+    })
+    document.body.classList.add(line.color);
+    document.getElementById('line').innerHTML = line.name;
+
+    document.getElementById('bound').innerHTML = terminus.name;
+    document.getElementById('location').innerHTML = station.name;
+
+    if (parked) {
+        document.getElementById('vehicle').innerHTML = "At Station";
+    } else {
+        document.getElementById('vehicle').innerHTML = "Next Station";
     }
 }
