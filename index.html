@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCD</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="exp">
+    <div id="topbar">
+        <div class="left">
+            <img id="icon" src="./media/translink.jpg" alt="TRANSLINK">
+            <p id="line">Expo Line</p>
+            <div id="destination">
+                <p class="desc">bound for</p>
+                <p id="bound">Production Way-University</p>
+            </div>
+            
+        </div>
+        <div class="right">
+            <div class="centre">
+                <p id="vehicle">Next Station</p>
+                <h1 id="location">Commercial-Broadway</h1>
+            </div>
+        </div>
+    </div>
+    <div id="midbody">
+        <div id="linelength" class="table">
+            <div class="item past"></div>
+            <div class="item current"></div>
+            <div class="item future"></div>
+            <div class="item future"></div>
+            <div class="item future"></div>
+        </div>
+
+        <div id="descTable" class="table">
+            <div class="item past">
+                <span>Stadium-Chinatown</span>
+            </div>
+            <div class="item current">
+                <span>Commercial-Broadway</span>
+                <div class="connections">
+                    <div class="line mil"><span>Millenium Line</span></div>
+                    <div class="line bline"><span>99 B-Line</span></div>
+                </div>
+            </div>
+            <div class="item future">
+                <span>Nanaimo</span>
+            </div>
+            <div class="item future">
+                <span>29th Avenue</span>
+            </div>
+        </div>
+    </div>
+    <div id="bottombar" class="nodoors">
+        <div class="cont doors">
+            <img src="./media/doors.svg" alt="Doors">
+            <span>Doors open this side</span>
+        </div>
+        <div class="cont nodoors">
+            <img src="./media/nodoors.svg" alt="No Doors">
+            <span>Doors open on the opposite side</span>
+        </div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
