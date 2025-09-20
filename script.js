@@ -1,5 +1,7 @@
 let lines, connections, stations;
 let line, station, terminus, facing, parked;
+let distance, distanceAbs, direction, currentIndex, terminusIndex;
+let stationsToGo = [];
 
 const colors = ["exp", "mil", "can"];
 
@@ -58,6 +60,7 @@ const setup = (configs) => {
         return;
     }
     station = stations[configs['station']];
+    currentIndex = line.stations.indexOf(configs['station']);
 
     if (!configs['terminus'] || !stations[configs['terminus']]) {
         console.error("CONFIG: Bad terminus or not given");
@@ -72,6 +75,8 @@ const setup = (configs) => {
         return;
     }
     terminus = stations[configs['terminus']];
+    terminusIndex = line.stations.indexOf(configs['terminus']);
+    distance = terminusIndex - currentIndex;
 
     if (!configs['facing'] || (configs['facing'] != "left" && configs['facing'] != "right")) {
         console.error("CONFIG: facing has to be either left or right");
@@ -102,4 +107,24 @@ const setup = (configs) => {
     } else {
         document.getElementById('vehicle').innerHTML = "Next Station";
     }
+
+    // STATIONS TO GO SET UP
+    if (terminusIndex - currentIndex > 0) {
+        direction = true
+    } else {
+        direction = false
+    }
+
+    stationsToGo = [];
+    if (direction == true) {
+        for (let i=currentIndex; i<(terminusIndex+1); i++) {
+            stationsToGo.push(stations[line.stations[i]]);
+        }
+    } else {
+        for (let i=currentIndex; i>(terminusIndex-1); i--) {
+            stationsToGo.push(stations[line.stations[i]]);
+        }
+    }
+
+    distance = stationsToGo.length - 1;
 }
